@@ -1,0 +1,274 @@
+[
+  {
+    "name": "weighted shortest path",
+    "request": {
+      "graph": {
+        "nodes": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          },
+          {
+            "id": "c"
+          },
+          {
+            "id": "d"
+          }
+        ],
+        "edges": [
+          {
+            "id": "ab",
+            "from": "a",
+            "to": "b",
+            "weight": 5
+          },
+          {
+            "id": "ac",
+            "from": "a",
+            "to": "c",
+            "weight": 1
+          },
+          {
+            "id": "cb",
+            "from": "c",
+            "to": "b",
+            "weight": 1
+          },
+          {
+            "id": "ba",
+            "from": "b",
+            "to": "a",
+            "weight": 1
+          }
+        ]
+      },
+      "operation": "path",
+      "start": "a",
+      "target": "b"
+    },
+    "expected": {
+      "cost": 2,
+      "nodes": [
+        "a",
+        "c",
+        "b"
+      ]
+    },
+    "error": false
+  },
+  {
+    "name": "unreachable",
+    "request": {
+      "graph": {
+        "nodes": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          },
+          {
+            "id": "c"
+          },
+          {
+            "id": "d"
+          }
+        ],
+        "edges": [
+          {
+            "id": "ab",
+            "from": "a",
+            "to": "b",
+            "weight": 5
+          },
+          {
+            "id": "ac",
+            "from": "a",
+            "to": "c",
+            "weight": 1
+          },
+          {
+            "id": "cb",
+            "from": "c",
+            "to": "b",
+            "weight": 1
+          },
+          {
+            "id": "ba",
+            "from": "b",
+            "to": "a",
+            "weight": 1
+          }
+        ]
+      },
+      "operation": "path",
+      "start": "a",
+      "target": "d"
+    },
+    "expected": {
+      "reachable": false
+    },
+    "error": false
+  },
+  {
+    "name": "cycle and isolated",
+    "request": {
+      "graph": {
+        "nodes": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          },
+          {
+            "id": "c"
+          },
+          {
+            "id": "d"
+          }
+        ],
+        "edges": [
+          {
+            "id": "ab",
+            "from": "a",
+            "to": "b",
+            "weight": 5
+          },
+          {
+            "id": "ac",
+            "from": "a",
+            "to": "c",
+            "weight": 1
+          },
+          {
+            "id": "cb",
+            "from": "c",
+            "to": "b",
+            "weight": 1
+          },
+          {
+            "id": "ba",
+            "from": "b",
+            "to": "a",
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "expected": {
+      "nodes": 4,
+      "edges": 4,
+      "isolated": [
+        "d"
+      ]
+    },
+    "error": false
+  },
+  {
+    "name": "components",
+    "request": {
+      "graph": {
+        "nodes": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          },
+          {
+            "id": "c"
+          },
+          {
+            "id": "d"
+          }
+        ],
+        "edges": [
+          {
+            "id": "ab",
+            "from": "a",
+            "to": "b",
+            "weight": 5
+          },
+          {
+            "id": "ac",
+            "from": "a",
+            "to": "c",
+            "weight": 1
+          },
+          {
+            "id": "cb",
+            "from": "c",
+            "to": "b",
+            "weight": 1
+          },
+          {
+            "id": "ba",
+            "from": "b",
+            "to": "a",
+            "weight": 1
+          }
+        ]
+      },
+      "operation": "components"
+    },
+    "expected": {
+      "components": [
+        [
+          "a",
+          "b",
+          "c"
+        ],
+        [
+          "d"
+        ]
+      ]
+    },
+    "error": false
+  },
+  {
+    "name": "negative weights",
+    "request": {
+      "graph": {
+        "nodes": [
+          {
+            "id": "a"
+          }
+        ],
+        "edges": [
+          {
+            "id": "e",
+            "from": "a",
+            "to": "a",
+            "weight": -1
+          }
+        ]
+      }
+    },
+    "expected": {},
+    "error": true
+  },
+  {
+    "name": "invalid endpoints",
+    "request": {
+      "graph": {
+        "nodes": [
+          {
+            "id": "a"
+          }
+        ],
+        "edges": [
+          {
+            "id": "e",
+            "from": "a",
+            "to": "missing"
+          }
+        ]
+      }
+    },
+    "expected": {},
+    "error": true
+  }
+]

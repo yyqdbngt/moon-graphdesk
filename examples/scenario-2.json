@@ -1,0 +1,47 @@
+{
+  "graph": {
+    "nodes": [
+      {
+        "id": "a"
+      },
+      {
+        "id": "b"
+      },
+      {
+        "id": "c"
+      },
+      {
+        "id": "d"
+      }
+    ],
+    "edges": [
+      {
+        "id": "ab",
+        "from": "a",
+        "to": "b",
+        "weight": 5
+      },
+      {
+        "id": "ac",
+        "from": "a",
+        "to": "c",
+        "weight": 1
+      },
+      {
+        "id": "cb",
+        "from": "c",
+        "to": "b",
+        "weight": 1
+      },
+      {
+        "id": "ba",
+        "from": "b",
+        "to": "a",
+        "weight": 1
+      }
+    ]
+  },
+  "operation": "path",
+  "start": "a",
+  "target": "d"
+}
