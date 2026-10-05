@@ -1,11 +1,17 @@
-# Moon GraphDesk architecture
+# Implemented architecture
 
-Status: development plan; functionality must be checked against release documentation.
+## Core
 
-目标：形成属性图从导入、索引、持久化到查询与关系分析的可用闭环。
+Node/edge/property import with identity and endpoint checks; outgoing and incoming indexes; typed/property selection; depth-limited forward and reverse traversal; nonnegative weighted shortest paths; iterative strongly connected components; cycles/isolated-node summaries; snapshots.
 
-核心模块：节点/边/属性模型；CSV/JSON 导入与诊断；ID 和属性索引；存储与重载；查询语言子集；路径与邻域；循环与影响分析；输出报告和 CLI。区别于图算法库的贡献是稳定数据语义、导入诊断、查询执行及可复核结果。
+## Boundaries
 
-三个场景：软件依赖变更的影响范围；服务与资产归属关系查询；文档引用与知识链接分析。各场景都有节点与边的可再生成输入，以及预期路径、邻域、环与影响集合。
+An in-memory property graph. Shortest paths use O(V²) Dijkstra and reject negative weights. Components are sorted for reproducible output. Impact analysis follows incoming edges up to the requested depth (default 1). No graph query language or disk database. Numeric weights use finite Double. Snapshots are JSON graph data validated again on import.
 
-验收：一万节点、五万边下记录导入和查询时间；小图与独立穷举或参考图实现比较；持久化重载不改变属性和查询结果。失败验证覆盖悬空边、重复节点策略、属性类型冲突、深路径及畸形查询。十月不承诺 Cypher 全语法、图数据库服务或分布式事务。
+## Integration
+
+The core accepts semantic values and returns deterministic JSON-shaped reports. Host adapters handle files, network or processes; they invoke the compiled MoonBit engine. The CLI package declares `supported_targets = "js"`; other backends test the portable core.
+
+## Validation evidence
+
+Fixture cases are hand-checked assertions. Independent reference checks and integration scripts are runnable from a clean checkout. CI executes four core backends and host checks. Historical proposal targets are not release results.
