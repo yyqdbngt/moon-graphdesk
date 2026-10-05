@@ -1,0 +1,9 @@
+supported_targets = "js"
+
+import {
+  "yyqdbngt/moon_graphdesk" @engine,
+  "moonbitlang/core/json",
+  "moonbitlang/core/env",
+}
+
+pkgtype(kind: "executable")
