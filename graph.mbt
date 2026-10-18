@@ -297,6 +297,7 @@ pub fn run(request : Value) -> Value raise {
   let graph = load_graph(get(request, "graph"))
   let operation = optional_str(get(request, "operation"), "summary")
   match operation {
+    "topology" => graph.topology()
     "snapshot" => graph.snapshot()
     "select" => record([("nodes", Array(graph.select(get(request, "query"))))])
     "neighbors" | "impact" => {
