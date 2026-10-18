@@ -2,8 +2,8 @@
 pub struct Graph {
   nodes : Map[String, Value]
   edges : Array[Value]
-  outgoing : Map[String, Array[Int]]
-  incoming : Map[String, Array[Int]]
+  outgoing : Map[String, Array[Int32]]
+  incoming : Map[String, Array[Int32]]
 }
 
 ///|
@@ -12,8 +12,8 @@ pub fn load_graph(source : Value) -> Graph raise {
     raise InputError("unsupported graph snapshot version")
   }
   let nodes : Map[String, Value] = {}
-  let outgoing : Map[String, Array[Int]] = {}
-  let incoming : Map[String, Array[Int]] = {}
+  let outgoing : Map[String, Array[Int32]] = {}
+  let incoming : Map[String, Array[Int32]] = {}
   for node in arr(get(source, "nodes")) {
     let id = str(get(node, "id"))
     if id == "" || nodes.contains(id) {
@@ -67,12 +67,12 @@ fn Graph::neighbors(
   id : String,
   reverse : Bool,
   edge_type : String,
-) -> Array[(String, Int)] raise InputError {
+) -> Array[(String, Int32)] raise InputError {
   if !self.nodes.contains(id) {
     raise InputError("unknown node: " + id)
   }
   let indices = if reverse { self.incoming[id] } else { self.outgoing[id] }
-  let neighbors : Array[(String, Int)] = []
+  let neighbors : Array[(String, Int32)] = []
   for index in indices {
     let edge = self.edges[index]
     if edge_type != "" && get(edge, "type") != String(edge_type) {
@@ -87,15 +87,15 @@ fn Graph::neighbors(
 pub fn Graph::traverse(
   self : Graph,
   start : String,
-  depth : Int,
-  reverse? : Bool = false,
-  edge_type? : String = "",
+  depth : Int32,
+  reverse~ : Bool = false,
+  edge_type~ : String = "",
 ) -> Value raise {
   if depth < 0 || depth > 100000 {
     raise InputError("depth out of range")
   }
   ignore(self.neighbors(start, reverse, edge_type))
-  let distances : Map[String, Int] = Map([(start, 0)])
+  let distances : Map[String, Int32] = Map([(start, 0)])
   let queue = [start]
   let parents : Map[String, String] = {}
   let mut cursor = 0
@@ -142,13 +142,13 @@ pub fn Graph::shortest_path(
   self : Graph,
   start : String,
   target : String,
-  edge_type? : String = "",
+  edge_type~ : String = "",
 ) -> Value raise {
   if !self.nodes.contains(start) || !self.nodes.contains(target) {
     raise InputError("unknown path endpoint")
   }
   let distances : Map[String, Double] = Map([(start, 0.0)])
-  let parents : Map[String, (String, Int)] = {}
+  let parents : Map[String, (String, Int32)] = {}
   let closed : Map[String, Bool] = {}
   while true {
     let mut chosen : String? = None
@@ -302,7 +302,11 @@ pub fn run(request : Value) -> Value raise {
     "select" => record([("nodes", Array(graph.select(get(request, "query"))))])
     "neighbors" | "impact" => {
       let requested_depth = optional_num(get(request, "depth"), 1.0)
-      if requested_depth < 0.0 || requested_depth > 100000.0 || requested_depth.floor() != requested_depth { raise InputError("depth must be a bounded nonnegative integer") }
+      if requested_depth < 0.0 ||
+        requested_depth > 100000.0 ||
+        requested_depth.floor() != requested_depth {
+        raise InputError("depth must be a bounded nonnegative integer")
+      }
       graph.traverse(
         str(get(request, "start")),
         requested_depth.to_int(),

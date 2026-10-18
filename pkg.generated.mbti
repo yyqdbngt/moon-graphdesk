@@ -29,6 +29,7 @@ pub struct Graph {
 pub fn Graph::shortest_path(Self, String, String, edge_type? : String) -> Value raise
 pub fn Graph::snapshot(Self) -> Value
 pub fn Graph::strong_components(Self) -> Array[Array[String]] raise
+pub fn Graph::topology(Self) -> Value raise
 pub fn Graph::traverse(Self, String, Int, reverse? : Bool, edge_type? : String) -> Value raise
 
 pub(all) enum Value {
