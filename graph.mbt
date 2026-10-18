@@ -299,13 +299,16 @@ pub fn run(request : Value) -> Value raise {
   match operation {
     "snapshot" => graph.snapshot()
     "select" => record([("nodes", Array(graph.select(get(request, "query"))))])
-    "neighbors" | "impact" =>
+    "neighbors" | "impact" => {
+      let requested_depth = optional_num(get(request, "depth"), 1.0)
+      if requested_depth < 0.0 || requested_depth > 100000.0 || requested_depth.floor() != requested_depth { raise InputError("depth must be a bounded nonnegative integer") }
       graph.traverse(
         str(get(request, "start")),
-        optional_num(get(request, "depth"), 1.0).to_int(),
+        requested_depth.to_int(),
         reverse=operation == "impact",
         edge_type=optional_str(get(request, "edge_type"), ""),
       )
+    }
     "path" =>
       graph.shortest_path(
         str(get(request, "start")),
