@@ -1,0 +1,31 @@
+{
+  "operation": "topology",
+  "graph": {
+    "nodes": [
+      {
+        "id": "a"
+      },
+      {
+        "id": "b"
+      },
+      {
+        "id": "c"
+      },
+      {
+        "id": "d"
+      }
+    ],
+    "edges": [
+      {
+        "id": "ab",
+        "from": "a",
+        "to": "b"
+      },
+      {
+        "id": "bc",
+        "from": "b",
+        "to": "c"
+      }
+    ]
+  }
+}

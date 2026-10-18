@@ -270,5 +270,157 @@
     },
     "expected": {},
     "error": true
+  },
+  {
+    "name": "followup parallel topology layers",
+    "request": {
+      "operation": "topology",
+      "graph": {
+        "nodes": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          },
+          {
+            "id": "c"
+          },
+          {
+            "id": "d"
+          }
+        ],
+        "edges": [
+          {
+            "id": "ab",
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "id": "bc",
+            "from": "b",
+            "to": "c"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "acyclic": true,
+      "layers": [
+        [
+          "a",
+          "d"
+        ],
+        [
+          "b"
+        ],
+        [
+          "c"
+        ]
+      ],
+      "blocked": []
+    },
+    "error": false
+  },
+  {
+    "name": "followup cycle downstream blocking",
+    "request": {
+      "operation": "topology",
+      "graph": {
+        "nodes": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          },
+          {
+            "id": "c"
+          },
+          {
+            "id": "d"
+          }
+        ],
+        "edges": [
+          {
+            "id": "ab",
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "id": "bc",
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "id": "ba",
+            "from": "b",
+            "to": "a"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "acyclic": false,
+      "blocked": [
+        "a",
+        "b",
+        "c"
+      ],
+      "cycles": [
+        [
+          "a",
+          "b"
+        ]
+      ],
+      "order": [
+        "d"
+      ]
+    },
+    "error": false
+  },
+  {
+    "name": "followup self loop block",
+    "request": {
+      "operation": "topology",
+      "graph": {
+        "nodes": [
+          {
+            "id": "a"
+          }
+        ],
+        "edges": [
+          {
+            "id": "aa",
+            "from": "a",
+            "to": "a"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "acyclic": false,
+      "cycles": [
+        [
+          "a"
+        ]
+      ]
+    },
+    "error": false
+  },
+  {
+    "name": "followup empty topology",
+    "request": {
+      "operation": "topology",
+      "graph": {
+        "nodes": [],
+        "edges": []
+      }
+    },
+    "expected": {
+      "acyclic": true,
+      "layers": []
+    },
+    "error": false
   }
 ]
