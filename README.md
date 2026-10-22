@@ -22,7 +22,7 @@ moon run cmd/main --target js -- examples/scenario-1.json
 node _build/js/debug/build/cmd/main/main.js examples/scenario-1.json
 ```
 
-Pass `-` to read a UTF-8 JSON request from stdin. A single request must be at most 16 MiB. Successful requests print one JSON result; invalid requests exit nonzero. The host runner is a separate process and does not edit the input request file.
+Pass `-` to read a UTF-8 JSON request from stdin. A single request must be at most 16 MiB, at most 65,536 nodes and 262,144 edges, and node/edge IDs are 1..256 characters. Successful requests print one JSON result; invalid requests exit nonzero. The host runner is a separate process and does not edit the input request file.
 
 ## Library use
 

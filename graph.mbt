@@ -7,6 +7,22 @@ pub struct Graph {
 }
 
 ///|
+const MaxNodes : Int32 = 65536
+
+///|
+const MaxEdges : Int32 = 262144
+
+///|
+const MaxIdLength : Int32 = 256
+
+///|
+fn check_id(id : String, kind : String) -> Unit raise InputError {
+  if id.is_empty() || id.length() > MaxIdLength {
+    raise InputError(kind + " ID length must be 1..256")
+  }
+}
+
+///|
 pub fn load_graph(source : Value) -> Graph raise {
   if get(source, "version") != Null && get(source, "version") != Number(1.0) {
     raise InputError("unsupported graph snapshot version")
@@ -16,11 +32,15 @@ pub fn load_graph(source : Value) -> Graph raise {
   let incoming : Map[String, Array[Int32]] = Map([])
   for node in arr(get(source, "nodes")) {
     let id = str(get(node, "id"))
-    if id == "" || nodes.contains(id) {
-      raise InputError("empty or duplicate node ID")
+    check_id(id, "node")
+    if nodes.contains(id) {
+      raise InputError("duplicate node ID: " + id)
     }
     if get(node, "properties") != Null {
       ignore(obj(get(node, "properties")))
+    }
+    if nodes.length() >= MaxNodes {
+      raise InputError("graph exceeds 65536 nodes")
     }
     nodes[id] = node
     outgoing[id] = []
@@ -31,12 +51,16 @@ pub fn load_graph(source : Value) -> Graph raise {
   for i = 0; i < edges.length(); i = i + 1 {
     let edge = edges[i]
     let id = str(get(edge, "id"))
-    let from = str(get(edge, "from"))
-    let to = str(get(edge, "to"))
+    check_id(id, "edge")
     if ids.contains(id) {
-      raise InputError("duplicate edge ID")
+      raise InputError("duplicate edge ID: " + id)
     }
     ids[id] = true
+    if i >= MaxEdges {
+      raise InputError("graph exceeds 262144 edges")
+    }
+    let from = str(get(edge, "from"))
+    let to = str(get(edge, "to"))
     if !nodes.contains(from) || !nodes.contains(to) {
       raise InputError("edge references unknown endpoint: " + id)
     }

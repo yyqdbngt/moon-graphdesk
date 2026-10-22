@@ -679,5 +679,20 @@
       "nodes/1/out": 0,
       "self_loops": 0
     }
+  },
+  {
+    "name": "oversized node id rejected",
+    "request": {
+      "operation": "summary",
+      "graph": {
+        "nodes": [
+          {
+            "id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+          }
+        ],
+        "edges": []
+      }
+    },
+    "error": true
   }
 ]
