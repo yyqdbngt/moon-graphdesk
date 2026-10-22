@@ -494,6 +494,7 @@ pub fn run(request : Value) -> Value raise {
       )
     }
     "snapshot" => graph.snapshot()
+    "diff" => graph_diff(graph, load_graph(get(request, "other")))
     "select" => record([("nodes", Array(graph.select(get(request, "query"))))])
     "neighbors" | "impact" => {
       let requested_depth = optional_num(get(request, "depth"), 1.0)

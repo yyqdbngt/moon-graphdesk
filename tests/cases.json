@@ -852,5 +852,100 @@
       "count": 1,
       "truncated": true
     }
+  },
+  {
+    "name": "diff detects structural changes",
+    "request": {
+      "operation": "diff",
+      "graph": {
+        "nodes": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "c"
+          }
+        ],
+        "edges": [
+          {
+            "id": "ab",
+            "from": "a",
+            "to": "c"
+          }
+        ]
+      },
+      "other": {
+        "nodes": [
+          {
+            "id": "a",
+            "type": "service"
+          },
+          {
+            "id": "b"
+          },
+          {
+            "id": "new"
+          }
+        ],
+        "edges": [
+          {
+            "id": "ab",
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "id": "an",
+            "from": "a",
+            "to": "new"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "identical": false,
+      "nodes_added": [
+        "b",
+        "new"
+      ],
+      "nodes_removed": [
+        "c"
+      ],
+      "nodes_changed": [
+        "a"
+      ],
+      "edges_added": [
+        "an"
+      ],
+      "edges_changed": [
+        "ab"
+      ],
+      "changes": 6
+    }
+  },
+  {
+    "name": "diff of identical snapshots",
+    "request": {
+      "operation": "diff",
+      "graph": {
+        "nodes": [
+          {
+            "id": "a"
+          }
+        ],
+        "edges": []
+      },
+      "other": {
+        "nodes": [
+          {
+            "id": "a"
+          }
+        ],
+        "edges": []
+      }
+    },
+    "expected": {
+      "identical": true,
+      "changes": 0
+    }
   }
 ]

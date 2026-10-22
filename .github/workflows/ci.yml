@@ -46,3 +46,4 @@ jobs:
       - run: python -B scripts/scale_reference.py
       - run: python -B scripts/pagerank_reference.py
       - run: python -B scripts/paths_reference.py
+      - run: python -B scripts/diff_reference.py

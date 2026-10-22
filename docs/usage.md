@@ -2,6 +2,56 @@
 
 Every example below is an executable fixture. Assertions cover the listed result fields; additional output fields are documented by the API and other fixtures. Error cases intentionally reject the request.
 
+## diff
+
+```json
+{
+  "graph": {
+    "nodes": [
+      {
+        "id": "a"
+      }
+    ],
+    "edges": []
+  },
+  "other": {
+    "nodes": [
+      {
+        "id": "a"
+      },
+      {
+        "id": "b"
+      }
+    ],
+    "edges": [
+      {
+        "id": "ab",
+        "from": "a",
+        "to": "b"
+      }
+    ]
+  },
+  "operation": "diff"
+}
+```
+
+Expected result fields:
+
+```json
+{
+  "identical": false,
+  "nodes_added": [
+    "b"
+  ],
+  "edges_added": [
+    "ab"
+  ],
+  "changes": 2
+}
+```
+
+`other` is compared against `graph` and both pass full import validation first. Added/removed are ID-set differences; a shared ID whose node or edge payload differs structurally is reported as changed, not removed and re-added. All lists are sorted and the changes field counts every entry.
+
 ## paths
 
 ```json
