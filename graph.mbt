@@ -147,25 +147,23 @@ pub fn Graph::shortest_path(
   if !self.nodes.contains(start) || !self.nodes.contains(target) {
     raise InputError("unknown path endpoint")
   }
+  // Binary-heap Dijkstra with lazy stale-entry skipping. The (distance, id)
+  // heap order reproduces the previous linear-scan tie-breaking exactly.
   let distances : Map[String, Double] = Map([(start, 0.0)])
   let parents : Map[String, (String, Int32)] = Map([])
   let closed : Map[String, Bool] = Map([])
+  let heap : MinHeap = { items: [], }
+  heap.push((0.0, start))
   while true {
-    let mut chosen : String? = None
-    let mut best = 1.7976931348623157e308
-    for id, distance in distances {
-      let tie = match chosen {
-        None => true
-        Some(other) => id < other
-      }
-      if !closed.contains(id) && (distance < best || (distance == best && tie)) {
-        chosen = Some(id)
-        best = distance
-      }
-    }
-    let current = match chosen {
+    let (distance, current) = match heap.pop() {
       None => break
-      Some(id) => id
+      Some(entry) => entry
+    }
+    if closed.contains(current) {
+      continue
+    }
+    if distance > distances[current] {
+      continue
     }
     if current == target {
       break
@@ -175,13 +173,15 @@ pub fn Graph::shortest_path(
       if closed.contains(neighbor) {
         continue
       }
-      let distance = best + optional_num(get(self.edges[edge], "weight"), 1.0)
-      if distance.is_inf() {
+      let candidate = distance +
+        optional_num(get(self.edges[edge], "weight"), 1.0)
+      if candidate.is_inf() {
         raise InputError("path weight overflow")
       }
-      if distance < distances.get(neighbor).unwrap_or(1.7976931348623157e308) {
-        distances[neighbor] = distance
+      if candidate < distances.get(neighbor).unwrap_or(1.7976931348623157e308) {
+        distances[neighbor] = candidate
         parents[neighbor] = (current, edge)
+        heap.push((candidate, neighbor))
       }
     }
   }
