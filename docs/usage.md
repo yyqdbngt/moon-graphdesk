@@ -2,6 +2,56 @@
 
 Every example below is an executable fixture. Assertions cover the listed result fields; additional output fields are documented by the API and other fixtures. Error cases intentionally reject the request.
 
+## weak_components
+
+```json
+{
+  "graph": {
+    "nodes": [
+      {
+        "id": "a"
+      },
+      {
+        "id": "b"
+      },
+      {
+        "id": "c"
+      }
+    ],
+    "edges": [
+      {
+        "id": "ab",
+        "from": "a",
+        "to": "b"
+      },
+      {
+        "id": "bc",
+        "from": "c",
+        "to": "b"
+      }
+    ]
+  },
+  "operation": "weak_components"
+}
+```
+
+Expected result fields:
+
+```json
+{
+  "components": [
+    [
+      "a",
+      "b",
+      "c"
+    ]
+  ],
+  "edge_direction": "ignored"
+}
+```
+
+Connectivity treats every edge as undirected, so one-way and two-way links join the same component. Components are sorted internally and by first member, matching the strong-components report format.
+
 ## diff
 
 ```json

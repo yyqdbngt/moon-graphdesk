@@ -947,5 +947,61 @@
       "identical": true,
       "changes": 0
     }
+  },
+  {
+    "name": "weak components ignore direction",
+    "request": {
+      "operation": "weak_components",
+      "graph": {
+        "nodes": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          },
+          {
+            "id": "c"
+          },
+          {
+            "id": "d"
+          },
+          {
+            "id": "e"
+          }
+        ],
+        "edges": [
+          {
+            "id": "ab",
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "id": "cb",
+            "from": "c",
+            "to": "b"
+          },
+          {
+            "id": "de",
+            "from": "d",
+            "to": "e"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "components": [
+        [
+          "a",
+          "b",
+          "c"
+        ],
+        [
+          "d",
+          "e"
+        ]
+      ],
+      "edge_direction": "ignored"
+    }
   }
 ]

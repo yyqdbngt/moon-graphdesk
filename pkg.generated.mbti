@@ -46,6 +46,7 @@ pub fn Graph::strong_components(Self) -> Array[Array[String]] raise
 pub fn Graph::subgraph(Self, Value, Value) -> Value raise
 pub fn Graph::topology(Self) -> Value raise
 pub fn Graph::traverse(Self, String, Int32, reverse? : Bool, edge_type? : String) -> Value raise
+pub fn Graph::weak_components(Self) -> Array[Array[String]] raise
 
 pub(all) enum Value {
   Null

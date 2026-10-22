@@ -47,3 +47,4 @@ jobs:
       - run: python -B scripts/pagerank_reference.py
       - run: python -B scripts/paths_reference.py
       - run: python -B scripts/diff_reference.py
+      - run: python -B scripts/weak_reference.py

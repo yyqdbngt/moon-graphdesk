@@ -518,6 +518,11 @@ pub fn run(request : Value) -> Value raise {
       )
     "components" =>
       record([("components", Array(graph.strong_components().map(strings)))])
+    "weak_components" =>
+      record([
+        ("components", Array(graph.weak_components().map(strings))),
+        ("edge_direction", String("ignored")),
+      ])
     "summary" => {
       let components = graph.strong_components()
       let cyclic = components.filter(fn(c) {
