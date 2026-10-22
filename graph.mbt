@@ -481,6 +481,18 @@ pub fn run(request : Value) -> Value raise {
         edge_type=optional_str(get(request, "edge_type"), ""),
       )
     }
+    "paths" => {
+      let limit = optional_num(get(request, "limit"), 10.0)
+      if limit < 1.0 || limit > 1000.0 || limit.floor() != limit {
+        raise InputError("limit must be a bounded integer 1..1000")
+      }
+      graph.simple_paths(
+        str(get(request, "start")),
+        str(get(request, "target")),
+        limit.to_int(),
+        edge_type=optional_str(get(request, "edge_type"), ""),
+      )
+    }
     "snapshot" => graph.snapshot()
     "select" => record([("nodes", Array(graph.select(get(request, "query"))))])
     "neighbors" | "impact" => {

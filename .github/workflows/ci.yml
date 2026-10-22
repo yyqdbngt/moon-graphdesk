@@ -45,3 +45,4 @@ jobs:
       - run: python -B scripts/degree_reference.py
       - run: python -B scripts/scale_reference.py
       - run: python -B scripts/pagerank_reference.py
+      - run: python -B scripts/paths_reference.py

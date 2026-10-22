@@ -2,6 +2,67 @@
 
 Every example below is an executable fixture. Assertions cover the listed result fields; additional output fields are documented by the API and other fixtures. Error cases intentionally reject the request.
 
+## paths
+
+```json
+{
+  "graph": {
+    "nodes": [
+      {
+        "id": "a"
+      },
+      {
+        "id": "b"
+      },
+      {
+        "id": "d"
+      }
+    ],
+    "edges": [
+      {
+        "id": "ab",
+        "from": "a",
+        "to": "b"
+      },
+      {
+        "id": "bd",
+        "from": "b",
+        "to": "d",
+        "weight": 3
+      }
+    ]
+  },
+  "operation": "paths",
+  "start": "a",
+  "target": "d"
+}
+```
+
+Expected result fields:
+
+```json
+{
+  "count": 1,
+  "truncated": false,
+  "paths": [
+    {
+      "nodes": [
+        "a",
+        "b",
+        "d"
+      ],
+      "edges": [
+        "ab",
+        "bd"
+      ],
+      "weight": 4
+    }
+  ]
+}
+```
+
+Enumerates simple paths (no repeated nodes) depth-first in edge insertion order; every entry carries nodes, edge IDs and summed weight. An optional limit (integer 1..1000, default 10) truncates the listing and reports truncated=true when more paths exist. start == target yields the single trivial path. Enumeration is bounded by a one-million-step budget; path-poor dense graphs can exceed it and are refused instead of hanging.
+
 ## pagerank
 
 ```json
