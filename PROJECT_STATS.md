@@ -4,10 +4,10 @@ Snapshot date: 2026-10-22. Module version: 0.3.0; repository release: 0.3.0.
 
 | Category | Count |
 |---|---:|
-| Owned production MoonBit physical lines (root + CLI) | 901 |
-| Nonblank, non-comment production lines | 808 |
-| MoonBit test declarations (includes generated fixture tests) | 27 |
+| Owned production MoonBit physical lines (root + CLI) | 1221 |
+| Nonblank, non-comment production lines | 1121 |
+| MoonBit test declarations (includes generated fixture tests) | 40 |
 | Generated fixture test declarations | 0 |
-| CLI fixture cases | 18 |
+| CLI fixture cases | 24 |
 
 Dependencies, tests, examples, documentation and build outputs are excluded from the production line count. Shared JSON/CLI scaffolding is infrastructure and not a claim of unique domain contribution. Test declarations are executable counts, not a claim of that many independent requirements. CI and installed-package evidence are recorded separately after validation. Original planning line-count ranges are not completion results.
