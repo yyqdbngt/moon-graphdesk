@@ -1003,5 +1003,41 @@
       ],
       "edge_direction": "ignored"
     }
+  },
+  {
+    "name": "betweenness chain interior",
+    "request": {
+      "operation": "betweenness",
+      "graph": {
+        "nodes": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          },
+          {
+            "id": "c"
+          }
+        ],
+        "edges": [
+          {
+            "id": "ab",
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "id": "bc",
+            "from": "b",
+            "to": "c"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "scores/0/id": "b",
+      "scores/0/score": 1,
+      "scores/1/score": 0
+    }
   }
 ]

@@ -2,6 +2,62 @@
 
 Every example below is an executable fixture. Assertions cover the listed result fields; additional output fields are documented by the API and other fixtures. Error cases intentionally reject the request.
 
+## betweenness
+
+```json
+{
+  "graph": {
+    "nodes": [
+      {
+        "id": "a"
+      },
+      {
+        "id": "b"
+      },
+      {
+        "id": "c"
+      }
+    ],
+    "edges": [
+      {
+        "id": "ab",
+        "from": "a",
+        "to": "b"
+      },
+      {
+        "id": "bc",
+        "from": "b",
+        "to": "c"
+      }
+    ]
+  },
+  "operation": "betweenness"
+}
+```
+
+Expected result fields:
+
+```json
+{
+  "scores": [
+    {
+      "id": "b",
+      "score": 1
+    },
+    {
+      "id": "a",
+      "score": 0
+    },
+    {
+      "id": "c",
+      "score": 0
+    }
+  ]
+}
+```
+
+Brandes unweighted betweenness over directed edges: the score counts how many ordered shortest-path pairs a node sits inside of, endpoints excluded. Scores sort descending with ascending-ID tie-breaks; an optional edge_type restricts edges. Inputs where nodes x (nodes + edges) exceeds 20,000,000 are refused before any work runs.
+
 ## weak_components
 
 ```json

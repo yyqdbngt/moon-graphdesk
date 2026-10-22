@@ -523,6 +523,8 @@ pub fn run(request : Value) -> Value raise {
         ("components", Array(graph.weak_components().map(strings))),
         ("edge_direction", String("ignored")),
       ])
+    "betweenness" =>
+      graph.betweenness(edge_type=optional_str(get(request, "edge_type"), ""))
     "summary" => {
       let components = graph.strong_components()
       let cyclic = components.filter(fn(c) {
