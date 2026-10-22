@@ -2,6 +2,65 @@
 
 Every example below is an executable fixture. Assertions cover the listed result fields; additional output fields are documented by the API and other fixtures. Error cases intentionally reject the request.
 
+## critical path
+
+```json
+{
+  "graph": {
+    "nodes": [
+      {
+        "id": "a"
+      },
+      {
+        "id": "b"
+      },
+      {
+        "id": "c"
+      }
+    ],
+    "edges": [
+      {
+        "id": "ab",
+        "from": "a",
+        "to": "b",
+        "weight": 5
+      },
+      {
+        "id": "ac",
+        "from": "a",
+        "to": "c",
+        "weight": 1
+      },
+      {
+        "id": "cb",
+        "from": "c",
+        "to": "b",
+        "weight": 1
+      }
+    ]
+  },
+  "operation": "critical_path"
+}
+```
+
+Expected result fields:
+
+```json
+{
+  "acyclic": true,
+  "nodes": [
+    "a",
+    "b"
+  ],
+  "edges": [
+    "ab"
+  ],
+  "weight": 5
+}
+```
+
+Cyclic graphs return `"acyclic": false` with empty nodes/edges and null weight instead of guessing a longest walk. Equal-weight chains resolve to the lexicographically smallest chain. An optional `edge_type` restricts the edges considered.
+
 ## weighted shortest path
 
 ```json

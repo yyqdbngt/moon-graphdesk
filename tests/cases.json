@@ -422,5 +422,113 @@
       "layers": []
     },
     "error": false
+  },
+  {
+    "name": "critical path heaviest chain",
+    "request": {
+      "operation": "critical_path",
+      "graph": {
+        "nodes": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          },
+          {
+            "id": "c"
+          }
+        ],
+        "edges": [
+          {
+            "id": "ab",
+            "from": "a",
+            "to": "b",
+            "weight": 5
+          },
+          {
+            "id": "ac",
+            "from": "a",
+            "to": "c",
+            "weight": 1
+          },
+          {
+            "id": "cb",
+            "from": "c",
+            "to": "b",
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "expected": {
+      "acyclic": true,
+      "nodes": [
+        "a",
+        "b"
+      ],
+      "edges": [
+        "ab"
+      ],
+      "weight": 5
+    }
+  },
+  {
+    "name": "critical path cycle refused",
+    "request": {
+      "operation": "critical_path",
+      "graph": {
+        "nodes": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          }
+        ],
+        "edges": [
+          {
+            "id": "ab",
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "id": "ba",
+            "from": "b",
+            "to": "a"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "acyclic": false,
+      "nodes": [],
+      "weight": null
+    }
+  },
+  {
+    "name": "critical path edgeless smallest node",
+    "request": {
+      "operation": "critical_path",
+      "graph": {
+        "nodes": [
+          {
+            "id": "b"
+          },
+          {
+            "id": "a"
+          }
+        ],
+        "edges": []
+      }
+    },
+    "expected": {
+      "acyclic": true,
+      "nodes": [
+        "a"
+      ],
+      "edges": [],
+      "weight": 0
+    }
   }
 ]

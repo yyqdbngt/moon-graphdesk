@@ -26,6 +26,7 @@ pub struct Graph {
   outgoing : Map[String, Array[Int]]
   incoming : Map[String, Array[Int]]
 }
+pub fn Graph::critical_path(Self, edge_type? : String) -> Value raise
 pub fn Graph::shortest_path(Self, String, String, edge_type? : String) -> Value raise
 pub fn Graph::snapshot(Self) -> Value
 pub fn Graph::strong_components(Self) -> Array[Array[String]] raise

@@ -298,6 +298,8 @@ pub fn run(request : Value) -> Value raise {
   let operation = optional_str(get(request, "operation"), "summary")
   match operation {
     "topology" => graph.topology()
+    "critical_path" =>
+      graph.critical_path(edge_type=optional_str(get(request, "edge_type"), ""))
     "snapshot" => graph.snapshot()
     "select" => record([("nodes", Array(graph.select(get(request, "query"))))])
     "neighbors" | "impact" => {

@@ -1,0 +1,45 @@
+{
+  "operation": "critical_path",
+  "graph": {
+    "nodes": [
+      {
+        "id": "build"
+      },
+      {
+        "id": "test"
+      },
+      {
+        "id": "package"
+      },
+      {
+        "id": "release"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e1",
+        "from": "build",
+        "to": "test",
+        "weight": 4
+      },
+      {
+        "id": "e2",
+        "from": "test",
+        "to": "release",
+        "weight": 6
+      },
+      {
+        "id": "e3",
+        "from": "build",
+        "to": "package",
+        "weight": 3
+      },
+      {
+        "id": "e4",
+        "from": "package",
+        "to": "release",
+        "weight": 2
+      }
+    ]
+  }
+}
