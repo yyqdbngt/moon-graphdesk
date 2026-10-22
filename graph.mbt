@@ -293,6 +293,61 @@ fn Graph::select(self : Graph, query : Value) -> Array[Value] raise {
 }
 
 ///|
+pub fn Graph::subgraph(
+  self : Graph,
+  nodes_value : Value,
+  query : Value,
+) -> Value raise {
+  if (nodes_value != Null) == (query != Null) {
+    raise InputError("subgraph requires exactly one of nodes or query")
+  }
+  let keep : Map[String, Bool] = Map([])
+  if nodes_value != Null {
+    for id in string_list(nodes_value) {
+      if !self.nodes.contains(id) {
+        raise InputError("unknown node: " + id)
+      }
+      if keep.contains(id) {
+        raise InputError("duplicate subgraph node: " + id)
+      }
+      keep[id] = true
+    }
+  } else {
+    for node in self.select(query) {
+      keep[str(get(node, "id"))] = true
+    }
+  }
+  let nodes : Array[Value] = []
+  let ids = self.nodes.keys().collect()
+  ids.sort()
+  for id in ids {
+    if keep.contains(id) {
+      nodes.push(self.nodes[id])
+    }
+  }
+  // Only edges with both endpoints kept survive; node data is unchanged.
+  let edges : Array[Value] = []
+  for edge in self.edges {
+    if keep.contains(str(get(edge, "from"))) &&
+      keep.contains(str(get(edge, "to"))) {
+      edges.push(edge)
+    }
+  }
+  record([
+    ("nodes", Number(nodes.length().to_double())),
+    ("edges", Number(edges.length().to_double())),
+    (
+      "graph",
+      record([
+        ("version", Number(1.0)),
+        ("nodes", Array(nodes)),
+        ("edges", Array(edges)),
+      ]),
+    ),
+  ])
+}
+
+///|
 pub fn run(request : Value) -> Value raise {
   let graph = load_graph(get(request, "graph"))
   let operation = optional_str(get(request, "operation"), "summary")
@@ -300,6 +355,7 @@ pub fn run(request : Value) -> Value raise {
     "topology" => graph.topology()
     "critical_path" =>
       graph.critical_path(edge_type=optional_str(get(request, "edge_type"), ""))
+    "subgraph" => graph.subgraph(get(request, "nodes"), get(request, "query"))
     "snapshot" => graph.snapshot()
     "select" => record([("nodes", Array(graph.select(get(request, "query"))))])
     "neighbors" | "impact" => {

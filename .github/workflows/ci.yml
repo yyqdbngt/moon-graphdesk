@@ -38,3 +38,4 @@ jobs:
       - run: python -B scripts/reference.py
       - run: python -B scripts/followup_reference.py
       - run: python -B scripts/critical_reference.py
+      - run: python -B scripts/subgraph_reference.py

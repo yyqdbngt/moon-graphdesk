@@ -530,5 +530,69 @@
       "edges": [],
       "weight": 0
     }
+  },
+  {
+    "name": "subgraph explicit nodes",
+    "request": {
+      "operation": "subgraph",
+      "nodes": [
+        "a",
+        "c"
+      ],
+      "graph": {
+        "nodes": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          },
+          {
+            "id": "c"
+          }
+        ],
+        "edges": [
+          {
+            "id": "ab",
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "id": "bc",
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "id": "ac",
+            "from": "a",
+            "to": "c"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "nodes": 2,
+      "edges": 1,
+      "graph/nodes/1/id": "c",
+      "graph/edges/0/id": "ac"
+    }
+  },
+  {
+    "name": "subgraph unknown node",
+    "request": {
+      "operation": "subgraph",
+      "nodes": [
+        "missing"
+      ],
+      "graph": {
+        "nodes": [
+          {
+            "id": "a"
+          }
+        ],
+        "edges": []
+      }
+    },
+    "error": true
   }
 ]

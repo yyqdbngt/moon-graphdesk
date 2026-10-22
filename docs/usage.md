@@ -2,6 +2,72 @@
 
 Every example below is an executable fixture. Assertions cover the listed result fields; additional output fields are documented by the API and other fixtures. Error cases intentionally reject the request.
 
+## subgraph
+
+```json
+{
+  "graph": {
+    "nodes": [
+      {
+        "id": "a"
+      },
+      {
+        "id": "b"
+      },
+      {
+        "id": "c"
+      }
+    ],
+    "edges": [
+      {
+        "id": "ab",
+        "from": "a",
+        "to": "b"
+      },
+      {
+        "id": "ac",
+        "from": "a",
+        "to": "c"
+      }
+    ]
+  },
+  "operation": "subgraph",
+  "nodes": [
+    "a",
+    "c"
+  ]
+}
+```
+
+Expected result fields:
+
+```json
+{
+  "nodes": 2,
+  "edges": 1,
+  "graph": {
+    "version": 1,
+    "nodes": [
+      {
+        "id": "a"
+      },
+      {
+        "id": "c"
+      }
+    ],
+    "edges": [
+      {
+        "id": "ac",
+        "from": "a",
+        "to": "c"
+      }
+    ]
+  }
+}
+```
+
+Exactly one of `nodes` (explicit ID list, all must exist) or `query` (same type/property selection as the select operation) is required. Only edges with both endpoints kept survive, node data is unchanged, and the exported `graph` object is a valid import payload again.
+
 ## critical path
 
 ```json
