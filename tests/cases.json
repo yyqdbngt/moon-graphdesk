@@ -1089,5 +1089,76 @@
       },
       "graph/nodes/2/id": "d"
     }
+  },
+  {
+    "name": "merge unions graphs",
+    "request": {
+      "operation": "merge",
+      "graph": {
+        "nodes": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          }
+        ],
+        "edges": [
+          {
+            "id": "ab",
+            "from": "a",
+            "to": "b"
+          }
+        ]
+      },
+      "other": {
+        "nodes": [
+          {
+            "id": "b"
+          },
+          {
+            "id": "c"
+          }
+        ],
+        "edges": [
+          {
+            "id": "bc",
+            "from": "b",
+            "to": "c"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "nodes": 3,
+      "edges": 2,
+      "added_nodes": 1,
+      "added_edges": 1,
+      "graph/nodes/0/id": "a"
+    }
+  },
+  {
+    "name": "merge refuses conflicting node",
+    "request": {
+      "operation": "merge",
+      "graph": {
+        "nodes": [
+          {
+            "id": "a"
+          }
+        ],
+        "edges": []
+      },
+      "other": {
+        "nodes": [
+          {
+            "id": "a",
+            "type": "svc"
+          }
+        ],
+        "edges": []
+      }
+    },
+    "error": true
   }
 ]

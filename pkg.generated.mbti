@@ -12,6 +12,8 @@ pub fn from_json(Json) -> Value
 
 pub fn graph_diff(Graph, Graph) -> Value raise
 
+pub fn graph_merge(Graph, Graph) -> Value raise
+
 pub fn load_graph(Value) -> Graph raise
 
 pub fn parse_value(StringView) -> Value raise

@@ -2,6 +2,87 @@
 
 Every example below is an executable fixture. Assertions cover the listed result fields; additional output fields are documented by the API and other fixtures. Error cases intentionally reject the request.
 
+## merge
+
+```json
+{
+  "graph": {
+    "nodes": [
+      {
+        "id": "a"
+      },
+      {
+        "id": "b"
+      }
+    ],
+    "edges": [
+      {
+        "id": "ab",
+        "from": "a",
+        "to": "b"
+      }
+    ]
+  },
+  "other": {
+    "nodes": [
+      {
+        "id": "b"
+      },
+      {
+        "id": "c"
+      }
+    ],
+    "edges": [
+      {
+        "id": "bc",
+        "from": "b",
+        "to": "c"
+      }
+    ]
+  },
+  "operation": "merge"
+}
+```
+
+Expected result fields:
+
+```json
+{
+  "nodes": 3,
+  "edges": 2,
+  "added_nodes": 1,
+  "added_edges": 1,
+  "graph": {
+    "version": 1,
+    "nodes": [
+      {
+        "id": "a"
+      },
+      {
+        "id": "b"
+      },
+      {
+        "id": "c"
+      }
+    ],
+    "edges": [
+      {
+        "id": "ab",
+        "from": "a",
+        "to": "b"
+      },
+      {
+        "id": "bc",
+        "from": "b",
+        "to": "c"
+      }
+    ]
+  }
+}
+```
+
+Both inputs pass full import validation first. The union keeps identical shared payloads and refuses same-ID nodes or edges whose payloads differ structurally; added_nodes/added_edges count what the other side contributed, and the merged graph imports again.
+
 ## neighborhood
 
 ```json
