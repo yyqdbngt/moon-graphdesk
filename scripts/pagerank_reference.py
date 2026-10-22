@@ -19,7 +19,14 @@ def pagerank(ids, edges, damping=0.85, iterations=100, tolerance=1e-10, edge_typ
     sources = {i: [] for i in ids}
     for e in kept:
         outdeg[e['from']] += 1
-        sources[e['to']].append(e['from'])
+    # Match the engine's accumulation order exactly: incoming sources are
+    # grouped by ascending source ID, then edge order within each source.
+    out_edges = {i: [] for i in ids}
+    for e in kept:
+        out_edges[e['from']].append(e)
+    for source in sorted(ids):
+        for e in out_edges[source]:
+            sources[e['to']].append(source)
     n = len(ids)
     ranks = {i: 1.0 / n for i in ids}
     converged = False
