@@ -525,6 +525,20 @@ pub fn run(request : Value) -> Value raise {
       ])
     "betweenness" =>
       graph.betweenness(edge_type=optional_str(get(request, "edge_type"), ""))
+    "neighborhood" => {
+      let requested_depth = optional_num(get(request, "depth"), 1.0)
+      if requested_depth < 0.0 ||
+        requested_depth > 100000.0 ||
+        requested_depth.floor() != requested_depth {
+        raise InputError("depth must be a bounded nonnegative integer")
+      }
+      graph.neighborhood(
+        str(get(request, "start")),
+        requested_depth.to_int(),
+        reverse=get(request, "reverse") == Bool(true),
+        edge_type=optional_str(get(request, "edge_type"), ""),
+      )
+    }
     "summary" => {
       let components = graph.strong_components()
       let cyclic = components.filter(fn(c) {

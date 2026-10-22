@@ -2,6 +2,63 @@
 
 Every example below is an executable fixture. Assertions cover the listed result fields; additional output fields are documented by the API and other fixtures. Error cases intentionally reject the request.
 
+## neighborhood
+
+```json
+{
+  "graph": {
+    "nodes": [
+      {
+        "id": "a"
+      },
+      {
+        "id": "b"
+      },
+      {
+        "id": "c"
+      }
+    ],
+    "edges": [
+      {
+        "id": "ab",
+        "from": "a",
+        "to": "b"
+      },
+      {
+        "id": "bc",
+        "from": "b",
+        "to": "c"
+      }
+    ]
+  },
+  "operation": "neighborhood",
+  "start": "a",
+  "depth": 1
+}
+```
+
+Expected result fields:
+
+```json
+{
+  "visited": 2,
+  "nodes": 2,
+  "edges": 1,
+  "distances": [
+    {
+      "id": "a",
+      "distance": 0
+    },
+    {
+      "id": "b",
+      "distance": 1
+    }
+  ]
+}
+```
+
+Breadth-first closure within depth hops from start (default 1, 0..100000 integer), then induced-subgraph export over exactly the visited set: only edges with both endpoints inside survive, node payloads are untouched, and the graph object imports again. reverse=true walks incoming edges for impact views; an optional edge_type restricts traversal.
+
 ## betweenness
 
 ```json

@@ -39,6 +39,7 @@ pub struct Graph {
 pub fn Graph::betweenness(Self, edge_type? : String) -> Value raise
 pub fn Graph::critical_path(Self, edge_type? : String) -> Value raise
 pub fn Graph::degree_report(Self, edge_type? : String) -> Value
+pub fn Graph::neighborhood(Self, String, Int32, reverse? : Bool, edge_type? : String) -> Value raise
 pub fn Graph::pagerank(Self, damping? : Double, iterations? : Int32, tolerance? : Double, edge_type? : String) -> Value raise
 pub fn Graph::shortest_path(Self, String, String, edge_type? : String) -> Value raise
 pub fn Graph::simple_paths(Self, String, String, Int32, edge_type? : String) -> Value raise

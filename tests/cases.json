@@ -1039,5 +1039,55 @@
       "scores/0/score": 1,
       "scores/1/score": 0
     }
+  },
+  {
+    "name": "neighborhood induced export",
+    "request": {
+      "operation": "neighborhood",
+      "start": "a",
+      "depth": 1,
+      "graph": {
+        "nodes": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          },
+          {
+            "id": "c"
+          },
+          {
+            "id": "d"
+          }
+        ],
+        "edges": [
+          {
+            "id": "ab",
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "id": "bc",
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "id": "ad",
+            "from": "a",
+            "to": "d"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "visited": 3,
+      "edges": 2,
+      "distances/0": {
+        "id": "a",
+        "distance": 0
+      },
+      "graph/nodes/2/id": "d"
+    }
   }
 ]
