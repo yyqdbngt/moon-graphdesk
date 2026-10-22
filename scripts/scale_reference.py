@@ -88,5 +88,74 @@ for e in sorted(dag_edges, key=lambda e: position[e['from']]):
 critical = run({'operation': 'critical_path', 'graph': dag})
 assert critical['weight'] == max(best.values()), (critical['weight'], max(best.values()))
 elapsed_dag = time.monotonic() - start
+
+# Neighborhood closure on the big weighted graph versus Python BFS.
+start = time.monotonic()
+adjacency_scale = {}
+for e in edges:
+    adjacency_scale.setdefault(e['from'], []).append(e['to'])
+closure = {'0': 0}
+frontier = ['0']
+for hop in (1, 2, 3):
+    nxt = []
+    for node in frontier:
+        for neighbor in adjacency_scale.get(node, []):
+            if neighbor not in closure:
+                closure[neighbor] = hop
+                nxt.append(neighbor)
+    frontier = nxt
+hood = run({'operation': 'neighborhood', 'graph': graph, 'start': '0', 'depth': 3})
+assert hood['visited'] == len(closure)
+kept_hood = [e for e in edges if e['from'] in closure and e['to'] in closure]
+assert hood['edges'] == len(kept_hood)
+elapsed_hood = time.monotonic() - start
+
+# Betweenness on a mid-size graph versus a compact independent Brandes, and a
+# budget refusal on the oversized graph.
+start = time.monotonic()
+n = 800
+mid_edges = [{'id': 'm' + str(k), 'from': str(a), 'to': str(b)}
+             for k, (a, b) in enumerate((a, b) for a in range(n) for b in range(n)
+                                        if a != b and random.random() < 0.005)]
+mid = {'nodes': [{'id': str(i)} for i in range(n)], 'edges': mid_edges}
+def brandes(ids, edge_list):
+    adjacency = {}
+    for e in edge_list:
+        adjacency.setdefault(e['from'], []).append(e['to'])
+    scores = {i: 0.0 for i in ids}
+    for source in ids:
+        sigma = {source: 1.0}
+        distance = {source: 0}
+        predecessors = {}
+        order, queue, cursor = [], [source], 0
+        while cursor < len(queue):
+            node = queue[cursor]
+            cursor += 1
+            order.append(node)
+            for neighbor in adjacency.get(node, []):
+                if neighbor not in distance:
+                    distance[neighbor] = distance[node] + 1
+                    queue.append(neighbor)
+                if distance[neighbor] == distance[node] + 1:
+                    sigma[neighbor] = sigma.get(neighbor, 0.0) + sigma[node]
+                    predecessors.setdefault(neighbor, []).append(node)
+        delta = {}
+        for node in reversed(order):
+            for pred in predecessors.get(node, []):
+                delta[pred] = delta.get(pred, 0.0) + sigma[pred] / sigma[node] * (1.0 + delta.get(node, 0.0))
+            if node != source:
+                scores[node] += delta.get(node, 0.0)
+    return scores
+mid_ids = sorted(str(i) for i in range(n))
+mid_scores = run({'operation': 'betweenness', 'graph': mid})['scores']
+engine_scores = {entry['id']: entry['score'] for entry in mid_scores}
+expected_scores = brandes(mid_ids, mid_edges)
+assert sum(abs(engine_scores[i] - expected_scores[i]) for i in mid_ids) < 1e-6
+refused = subprocess.run(['node', str(root/'_build/js/debug/build/cmd/main/main.js'), '-'],
+                         input=json.dumps({'operation': 'betweenness', 'graph': graph}),
+                         capture_output=True, text=True, encoding='utf-8', timeout=120)
+assert refused.returncode == 1 and 'budget' in refused.stdout
+elapsed_betweenness = time.monotonic() - start
 print(f'Scale smoke: {n} node DAG and {len(edges)} edge graph verified against independent '
-      f'algorithms (paths {elapsed_path:.1f}s, degree/subgraph {elapsed_degree:.1f}s, DAG {elapsed_dag:.1f}s)')
+      f'algorithms (paths {elapsed_path:.1f}s, degree/subgraph {elapsed_degree:.1f}s, DAG {elapsed_dag:.1f}s, '
+      f'neighborhood {elapsed_hood:.1f}s, betweenness {elapsed_betweenness:.1f}s)')
