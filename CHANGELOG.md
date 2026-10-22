@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.3.0 — 2026-10-22
+
+Registry version: 0.3.0.
 
 新增 critical_path：在无环图上按 prerequisite→dependent 方向计算最长加权路径，返回节点链、边链与总权重；环图明确返回 acyclic=false 而不伪造最长游走，等权重链按字典序取最小链以保证可复现输出。topology 的 Kahn 分层重构为共享内部实现，行为不变。
 
