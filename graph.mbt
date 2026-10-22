@@ -348,6 +348,83 @@ pub fn Graph::subgraph(
 }
 
 ///|
+fn Graph::count_typed(
+  self : Graph,
+  indices : Array[Int32],
+  edge_type : String,
+) -> Int32 {
+  let mut count = 0
+  for index in indices {
+    if edge_type == "" || get(self.edges[index], "type") == String(edge_type) {
+      count += 1
+    }
+  }
+  count
+}
+
+///|
+pub fn Graph::degree_report(self : Graph, edge_type~ : String = "") -> Value {
+  let ids = self.nodes.keys().collect()
+  ids.sort()
+  let entries : Array[Value] = []
+  let totals : Map[String, Int32] = Map([])
+  let mut sum = 0.0
+  for id in ids {
+    let outgoing = self.count_typed(self.outgoing[id], edge_type)
+    let incoming = self.count_typed(self.incoming[id], edge_type)
+    let total = outgoing + incoming
+    totals[id] = total
+    sum += total.to_double()
+    entries.push(
+      record([
+        ("id", String(id)),
+        ("in", Number(incoming.to_double())),
+        ("out", Number(outgoing.to_double())),
+        ("total", Number(total.to_double())),
+      ]),
+    )
+  }
+  // A self-loop contributes one incoming and one outgoing incidence.
+  let mut self_loops = 0
+  for edge in self.edges {
+    if (edge_type == "" || get(edge, "type") == String(edge_type)) &&
+      get(edge, "from") == get(edge, "to") {
+      self_loops += 1
+    }
+  }
+  let mut max_total = 0
+  let mut min_total = 0
+  let mut first = true
+  for id in ids {
+    let total = totals[id]
+    if first {
+      max_total = total
+      min_total = total
+      first = false
+    }
+    if total > max_total {
+      max_total = total
+    }
+    if total < min_total {
+      min_total = total
+    }
+  }
+  let extremes = fn(total : Int32) -> Value {
+    strings(ids.filter(fn(id) { totals[id] == total }))
+  }
+  record([
+    ("nodes", Array(entries)),
+    ("max_total", extremes(max_total)),
+    ("min_total", extremes(min_total)),
+    (
+      "average_total",
+      Number(if ids.is_empty() { 0.0 } else { sum / ids.length().to_double() }),
+    ),
+    ("self_loops", Number(self_loops.to_double())),
+  ])
+}
+
+///|
 pub fn run(request : Value) -> Value raise {
   let graph = load_graph(get(request, "graph"))
   let operation = optional_str(get(request, "operation"), "summary")
@@ -356,6 +433,8 @@ pub fn run(request : Value) -> Value raise {
     "critical_path" =>
       graph.critical_path(edge_type=optional_str(get(request, "edge_type"), ""))
     "subgraph" => graph.subgraph(get(request, "nodes"), get(request, "query"))
+    "degree" =>
+      graph.degree_report(edge_type=optional_str(get(request, "edge_type"), ""))
     "snapshot" => graph.snapshot()
     "select" => record([("nodes", Array(graph.select(get(request, "query"))))])
     "neighbors" | "impact" => {

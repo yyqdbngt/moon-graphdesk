@@ -594,5 +594,90 @@
       }
     },
     "error": true
+  },
+  {
+    "name": "degree report with self-loop",
+    "request": {
+      "operation": "degree",
+      "graph": {
+        "nodes": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          },
+          {
+            "id": "c"
+          }
+        ],
+        "edges": [
+          {
+            "id": "ab",
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "id": "bb",
+            "from": "b",
+            "to": "b"
+          },
+          {
+            "id": "cb",
+            "from": "c",
+            "to": "b"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "nodes/1/in": 3,
+      "nodes/1/total": 4,
+      "max_total": [
+        "b"
+      ],
+      "min_total": [
+        "a",
+        "c"
+      ],
+      "self_loops": 1,
+      "average_total": 2
+    }
+  },
+  {
+    "name": "degree type filter",
+    "request": {
+      "operation": "degree",
+      "edge_type": "dep",
+      "graph": {
+        "nodes": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          }
+        ],
+        "edges": [
+          {
+            "id": "ab",
+            "from": "a",
+            "to": "b",
+            "type": "dep"
+          },
+          {
+            "id": "ba",
+            "from": "b",
+            "to": "a",
+            "type": "call"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "nodes/0/total": 1,
+      "nodes/1/out": 0,
+      "self_loops": 0
+    }
   }
 ]

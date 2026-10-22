@@ -2,6 +2,62 @@
 
 Every example below is an executable fixture. Assertions cover the listed result fields; additional output fields are documented by the API and other fixtures. Error cases intentionally reject the request.
 
+## degree
+
+```json
+{
+  "graph": {
+    "nodes": [
+      {
+        "id": "a"
+      },
+      {
+        "id": "b"
+      },
+      {
+        "id": "c"
+      }
+    ],
+    "edges": [
+      {
+        "id": "ab",
+        "from": "a",
+        "to": "b"
+      },
+      {
+        "id": "bb",
+        "from": "b",
+        "to": "b"
+      },
+      {
+        "id": "cb",
+        "from": "c",
+        "to": "b"
+      }
+    ]
+  },
+  "operation": "degree"
+}
+```
+
+Expected result fields:
+
+```json
+{
+  "max_total": [
+    "b"
+  ],
+  "min_total": [
+    "a",
+    "c"
+  ],
+  "average_total": 2,
+  "self_loops": 1
+}
+```
+
+Every node reports `in`, `out` and `total` incidence in ID order; a self-loop counts once in each direction. `max_total`/`min_total` list all nodes sharing the extreme total, and an optional `edge_type` restricts the count to typed edges.
+
 ## subgraph
 
 ```json
