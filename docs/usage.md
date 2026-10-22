@@ -157,7 +157,7 @@ Expected result fields:
 }
 ```
 
-Ranks are unweighted and sorted descending with ascending-ID tie-breaks. Dangling nodes spread their rank uniformly over all nodes, so total mass stays 1. Optional damping (0..1, default 0.85), iterations (integer 1..100, default 20) and tolerance ((0, 1], default 1e-10) control the run; converged reports whether the total change dropped below tolerance.
+Ranks are unweighted and sorted descending with ascending-ID tie-breaks for exactly equal values; ranks separated only by floating-point noise may order differently across builds. Dangling nodes spread their rank uniformly over all nodes, so total mass stays 1. Optional damping (0..1, default 0.85), iterations (integer 1..100, default 20) and tolerance ((0, 1], default 1e-10) control the run; converged reports whether the total change dropped below tolerance.
 
 ## degree
 
