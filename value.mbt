@@ -6,7 +6,13 @@ pub(all) enum Value {
   String(String)
   Array(Array[Value])
   Object(Map[String, Value])
-} derive(Eq, Debug)
+} derive(Eq, @debug.Debug)
+
+///|
+pub extend Value with Eq::{equal, not_equal}
+
+///|
+pub extend Value with @debug.Debug::{to_repr}
 
 ///|
 pub fn from_json(value : Json) -> Value {
@@ -39,7 +45,8 @@ pub fn Value::stringify(self : Value) -> String {
 }
 
 ///|
-fn parse_value(source : StringView) -> Value raise {
+/// Parses JSON text into the engine's semantic value tree.
+pub fn parse_value(source : StringView) -> Value raise {
   from_json(@json.parse(source))
 }
 

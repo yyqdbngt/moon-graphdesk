@@ -11,9 +11,9 @@ pub fn load_graph(source : Value) -> Graph raise {
   if get(source, "version") != Null && get(source, "version") != Number(1.0) {
     raise InputError("unsupported graph snapshot version")
   }
-  let nodes : Map[String, Value] = {}
-  let outgoing : Map[String, Array[Int32]] = {}
-  let incoming : Map[String, Array[Int32]] = {}
+  let nodes : Map[String, Value] = Map([])
+  let outgoing : Map[String, Array[Int32]] = Map([])
+  let incoming : Map[String, Array[Int32]] = Map([])
   for node in arr(get(source, "nodes")) {
     let id = str(get(node, "id"))
     if id == "" || nodes.contains(id) {
@@ -27,7 +27,7 @@ pub fn load_graph(source : Value) -> Graph raise {
     incoming[id] = []
   }
   let edges = arr(get(source, "edges"))
-  let ids : Map[String, Bool] = {}
+  let ids : Map[String, Bool] = Map([])
   for i = 0; i < edges.length(); i = i + 1 {
     let edge = edges[i]
     let id = str(get(edge, "id"))
@@ -97,7 +97,7 @@ pub fn Graph::traverse(
   ignore(self.neighbors(start, reverse, edge_type))
   let distances : Map[String, Int32] = Map([(start, 0)])
   let queue = [start]
-  let parents : Map[String, String] = {}
+  let parents : Map[String, String] = Map([])
   let mut cursor = 0
   while cursor < queue.length() {
     let current = queue[cursor]
@@ -148,8 +148,8 @@ pub fn Graph::shortest_path(
     raise InputError("unknown path endpoint")
   }
   let distances : Map[String, Double] = Map([(start, 0.0)])
-  let parents : Map[String, (String, Int32)] = {}
-  let closed : Map[String, Bool] = {}
+  let parents : Map[String, (String, Int32)] = Map([])
+  let closed : Map[String, Bool] = Map([])
   while true {
     let mut chosen : String? = None
     let mut best = 1.7976931348623157e308
@@ -214,7 +214,7 @@ pub fn Graph::shortest_path(
 
 ///|
 pub fn Graph::strong_components(self : Graph) -> Array[Array[String]] raise {
-  let visited : Map[String, Bool] = {}
+  let visited : Map[String, Bool] = Map([])
   let order : Array[String] = []
   let ids = self.nodes.keys().collect()
   ids.sort()
@@ -275,7 +275,7 @@ fn Graph::select(self : Graph, query : Value) -> Array[Value] raise {
   ids.sort()
   let expected = get(query, "properties")
   ids
-  .filter(fn(id) {
+  .filter(id => {
     let node = self.nodes[id]
     if get(query, "type") != Null && get(query, "type") != get(node, "type") {
       return false
