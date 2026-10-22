@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+新增 pagerank：未加权 PageRank 中心性，悬挂节点质量均匀回撒保持总量为 1；可选 damping（0..1）、iterations（1..100 整数）与 tolerance，按名次降序/ID 升序输出并报告是否收敛。
+
 ## 0.3.0 — 2026-10-22
 
 Registry version: 0.3.0.

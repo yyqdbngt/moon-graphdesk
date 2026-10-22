@@ -36,6 +36,7 @@ pub struct Graph {
 }
 pub fn Graph::critical_path(Self, edge_type? : String) -> Value raise
 pub fn Graph::degree_report(Self, edge_type? : String) -> Value
+pub fn Graph::pagerank(Self, damping? : Double, iterations? : Int32, tolerance? : Double, edge_type? : String) -> Value raise
 pub fn Graph::shortest_path(Self, String, String, edge_type? : String) -> Value raise
 pub fn Graph::snapshot(Self) -> Value
 pub fn Graph::strong_components(Self) -> Array[Array[String]] raise

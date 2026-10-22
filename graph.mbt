@@ -459,6 +459,28 @@ pub fn run(request : Value) -> Value raise {
     "subgraph" => graph.subgraph(get(request, "nodes"), get(request, "query"))
     "degree" =>
       graph.degree_report(edge_type=optional_str(get(request, "edge_type"), ""))
+    "pagerank" => {
+      let damping = optional_num(get(request, "damping"), 0.85)
+      if damping < 0.0 || damping > 1.0 {
+        raise InputError("damping must be within 0..1")
+      }
+      let iterations = optional_num(get(request, "iterations"), 20.0)
+      if iterations < 1.0 ||
+        iterations > 100.0 ||
+        iterations.floor() != iterations {
+        raise InputError("iterations must be a bounded integer 1..100")
+      }
+      let tolerance = optional_num(get(request, "tolerance"), 0.0000000001)
+      if tolerance <= 0.0 || tolerance > 1.0 {
+        raise InputError("tolerance must be within (0, 1]")
+      }
+      graph.pagerank(
+        damping~,
+        iterations=iterations.to_int(),
+        tolerance~,
+        edge_type=optional_str(get(request, "edge_type"), ""),
+      )
+    }
     "snapshot" => graph.snapshot()
     "select" => record([("nodes", Array(graph.select(get(request, "query"))))])
     "neighbors" | "impact" => {

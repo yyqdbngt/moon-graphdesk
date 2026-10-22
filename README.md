@@ -9,7 +9,7 @@ Property graph queries, implemented in MoonBit with a JSON CLI and reusable libr
 
 ## Implemented
 
-Node/edge/property import with identity and endpoint checks; outgoing and incoming indexes; typed/property selection; depth-limited forward and reverse traversal; nonnegative weighted shortest paths; iterative strongly connected components; cycles/isolated-node summaries; snapshots; topology layers with cycle-blocked descendants; longest weighted critical paths on DAGs with deterministic tie-breaking; induced subgraph export by ID list or typed query; per-node degree reports with typed filtering, extremes and self-loop counts.
+Node/edge/property import with identity and endpoint checks; outgoing and incoming indexes; typed/property selection; depth-limited forward and reverse traversal; nonnegative weighted shortest paths; iterative strongly connected components; cycles/isolated-node summaries; snapshots; topology layers with cycle-blocked descendants; longest weighted critical paths on DAGs with deterministic tie-breaking; induced subgraph export by ID list or typed query; per-node degree reports with typed filtering, extremes and self-loop counts; PageRank centrality with dangling-mass redistribution.
 
 ## Build and run
 
@@ -63,9 +63,10 @@ python -B scripts/critical_reference.py
 python -B scripts/subgraph_reference.py
 python -B scripts/degree_reference.py
 python -B scripts/scale_reference.py
+python -B scripts/pagerank_reference.py
 ```
 
-There are 18 checked fixture cases in `tests/cases.json`, executed both in MoonBit white-box tests and through the actual Node CLI. Independent reference checks use Python's standard library or separately written algorithms. Fixtures are synthetic and are not presented as production adoption evidence. See [input and output examples](docs/usage.md) and [current boundaries](docs/boundaries.md).
+There are 20 checked fixture cases in `tests/cases.json`, executed both in MoonBit white-box tests and through the actual Node CLI. Independent reference checks use Python's standard library or separately written algorithms. Fixtures are synthetic and are not presented as production adoption evidence. See [input and output examples](docs/usage.md) and [current boundaries](docs/boundaries.md).
 
 ## Current boundaries
 

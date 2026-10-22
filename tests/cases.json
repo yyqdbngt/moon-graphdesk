@@ -694,5 +694,52 @@
       }
     },
     "error": true
+  },
+  {
+    "name": "pagerank ranks chain",
+    "request": {
+      "operation": "pagerank",
+      "graph": {
+        "nodes": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          }
+        ],
+        "edges": [
+          {
+            "id": "ab",
+            "from": "a",
+            "to": "b"
+          }
+        ]
+      },
+      "iterations": 100
+    },
+    "expected": {
+      "converged": true,
+      "ranks/0/id": "b",
+      "ranks/1/id": "a",
+      "ranks/0/rank": 0.6491228070313491,
+      "ranks/1/rank": 0.35087719296865083
+    }
+  },
+  {
+    "name": "pagerank rejects bad damping",
+    "request": {
+      "operation": "pagerank",
+      "damping": 1.5,
+      "graph": {
+        "nodes": [
+          {
+            "id": "a"
+          }
+        ],
+        "edges": []
+      }
+    },
+    "error": true
   }
 ]

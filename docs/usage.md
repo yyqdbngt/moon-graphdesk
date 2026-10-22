@@ -2,6 +2,52 @@
 
 Every example below is an executable fixture. Assertions cover the listed result fields; additional output fields are documented by the API and other fixtures. Error cases intentionally reject the request.
 
+## pagerank
+
+```json
+{
+  "graph": {
+    "nodes": [
+      {
+        "id": "a"
+      },
+      {
+        "id": "b"
+      }
+    ],
+    "edges": [
+      {
+        "id": "ab",
+        "from": "a",
+        "to": "b"
+      }
+    ]
+  },
+  "operation": "pagerank",
+  "iterations": 100
+}
+```
+
+Expected result fields:
+
+```json
+{
+  "converged": true,
+  "ranks": [
+    {
+      "id": "b",
+      "rank": 0.6491228070313491
+    },
+    {
+      "id": "a",
+      "rank": 0.35087719296865083
+    }
+  ]
+}
+```
+
+Ranks are unweighted and sorted descending with ascending-ID tie-breaks. Dangling nodes spread their rank uniformly over all nodes, so total mass stays 1. Optional damping (0..1, default 0.85), iterations (integer 1..100, default 20) and tolerance ((0, 1], default 1e-10) control the run; converged reports whether the total change dropped below tolerance.
+
 ## degree
 
 ```json
