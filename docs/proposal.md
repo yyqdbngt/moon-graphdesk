@@ -4,7 +4,7 @@
 
 账号：yyqdbngt；主要语言：MoonBit；许可：Apache-2.0；更新日期：2026-10-22。  
 GitHub：[https://github.com/yyqdbngt/moon-graphdesk](https://github.com/yyqdbngt/moon-graphdesk)  
-仓库发行：0.3.0；公共模块：[yyqdbngt/moon_graphdesk@0.3.0](https://mooncakes.io/docs/yyqdbngt/moon_graphdesk@0.3.0)
+仓库发行：0.4.0；公共模块：[yyqdbngt/moon_graphdesk@0.4.0](https://mooncakes.io/docs/yyqdbngt/moon_graphdesk@0.4.0)
 
 本文供个人参考，按本次实际代码及边界编写。公开提交、CI、发布和独立安装结果另附交付核对表，不以材料修订代替主办方重新审核。
 
@@ -75,7 +75,7 @@ GitHub：[https://github.com/yyqdbngt/moon-graphdesk](https://github.com/yyqdbng
 
 ## 三、实现和验证结构
 
-领域计算由 MoonBit 完成，宿主侧负责文件、HTTP、进程或独立参考算法。可复用接口保持 execute(Json)→Json 与语义值 run 入口；实际公开接口以 pkg.generated.mbti 为准。当前根目录包含 27 项 MoonBit 测试声明，CLI 固定夹具 18 组；其中自动生成的夹具测试按生成测试统计，不算额外生产实现。
+领域计算由 MoonBit 完成，宿主侧负责文件、HTTP、进程或独立参考算法。可复用接口保持 execute(Json)→Json 与语义值 run 入口；实际公开接口以 pkg.generated.mbti 为准。当前根目录包含 51 项 MoonBit 测试声明，CLI 固定夹具 29 组；其中自动生成的夹具测试按生成测试统计，不算额外生产实现。
 
 复核路径为四后端核心测试、真实 CLI 夹具、独立参考检查、宿主场景（适用时）、公开 CI 和公共包独立安装。新增检查运行：
 
@@ -94,6 +94,13 @@ python -B scripts/critical_reference.py
 python -B scripts/subgraph_reference.py
 python -B scripts/degree_reference.py
 python -B scripts/scale_reference.py
+python -B scripts/pagerank_reference.py
+python -B scripts/paths_reference.py
+python -B scripts/diff_reference.py
+python -B scripts/weak_reference.py
+python -B scripts/betweenness_reference.py
+python -B scripts/neighborhood_reference.py
+python -B scripts/merge_reference.py
 moon run cmd/main --target js -- examples/followup-20261018.json
 ```
 

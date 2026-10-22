@@ -3,7 +3,7 @@
 Property graph queries, implemented in MoonBit with a JSON CLI and reusable library API.
 
 - Repository: [https://github.com/yyqdbngt/moon-graphdesk](https://github.com/yyqdbngt/moon-graphdesk)
-- Package: `yyqdbngt/moon_graphdesk@0.3.0`
+- Package: `yyqdbngt/moon_graphdesk@0.4.0`
 - License: Apache-2.0
 - Release scope: **0.1.0 initial implementation**. The broader competition proposal in `docs/proposal.md` is a reference design, not a claim that every planned capability is implemented.
 
@@ -27,7 +27,7 @@ Pass `-` to read a UTF-8 JSON request from stdin. A single request must be at mo
 ## Library use
 
 ```sh
-moon add yyqdbngt/moon_graphdesk@0.3.0
+moon add yyqdbngt/moon_graphdesk@0.4.0
 ```
 
 In the consumer's `moon.pkg`:
@@ -96,3 +96,9 @@ Current source contains 12 MoonBit test declarations and 10 CLI fixtures (genera
 新增 critical_path（DAG 最长加权路径，环拒绝）、subgraph（按 ID 列表或类型/属性查询导出诱导子图，可再导入）与 degree（入/出/总度数、极值、自环统计，可选 edge_type）。最短路改为二叉堆 Dijkstra（O((V+E)logV)，平局裁决不变）。输入硬化：65,536 节点 / 262,144 边 / ID 1..256 字符上限，空边 ID 拒绝。全部编译告警清零；CI 增加 fmt 检查、接口清单新鲜度检查与中规模独立算法冒烟门（scripts/scale_reference.py）。
 
 Repository release: 0.3.0; installable MoonCakes module: `yyqdbngt/moon_graphdesk@0.3.0`.
+
+## 2026-10-22 second follow-up (0.4.0)
+
+新增 weak_components（忽略边方向的连通分量）、betweenness（Brandes 未加权介数中心性，节点数×(节点数+边数) 超 2000 万拒绝）、neighborhood（k 跳广度闭包 + 诱导子图导出 + 逐节点跳数，reverse 支持影响视图）与 merge（两图严格并集，共享 ID 载荷冲突即拒绝）。规模冒烟门扩展至 neighborhood 与 betweenness，并验证超大输入的预算拒绝。
+
+Repository release: 0.4.0; installable MoonCakes module: `yyqdbngt/moon_graphdesk@0.4.0`.
