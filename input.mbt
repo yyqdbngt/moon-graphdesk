@@ -1,7 +1,8 @@
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) suberror InputError {
   InputError(String)
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub extend InputError with Eq::{equal, not_equal}
